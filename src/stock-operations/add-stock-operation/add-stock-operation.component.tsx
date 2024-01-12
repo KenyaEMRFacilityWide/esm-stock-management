@@ -138,6 +138,7 @@ const AddStockOperation: React.FC<AddStockOperationProps> = (props) => {
           margin: "5px",
         }}
       >
+        <div>Can Edit: {props.canEdit}</div>
         <div style={{ margin: "10px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <span style={{ margin: "4px" }}>Status :</span>

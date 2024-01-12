@@ -176,6 +176,7 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
   };
   return (
     <div style={{ margin: "10px" }}>
+      <div>Testing: {canEdit && "true"}</div>
       <form
         className={`${rootStyles.formContainer} ${rootStyles.verticalForm}`}
       >
@@ -194,7 +195,7 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
                 itemToElement={(item) => {
                   return item?.operationNumber ?? "";
                 }}
-                titleText={t("requisitionStockOperation", "Requisition")}
+                titleText={t("requisitionStockOperation", "Select a Requisition")}
                 invalid={!!errors.requisitionStockOperationUuid}
                 invalidText={errors.requisitionStockOperationUuid?.message}
                 placeholder={t("chooseARequisition", "Choose a requisition")}
