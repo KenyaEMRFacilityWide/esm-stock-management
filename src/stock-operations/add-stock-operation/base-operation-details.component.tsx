@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StockOperationDTO } from "../../core/api/types/stockOperation/StockOperationDTO";
-import { SaveStockOperation } from "../../stock-items/types";
+import {
+  SaveStockOperation,
+  SaveStockOperationDetails,
+} from "../../stock-items/types";
 import {
   operationFromString,
   OperationType,
@@ -35,12 +38,15 @@ import { InitializeResult } from "./types";
 import rootStyles from "../../root.scss";
 import { ResourceRepresentation } from "../../core/api/api";
 import { useStockOperationPages } from "../stock-operations-table.resource";
+import { StockOperationItemDTO } from "../../core/api/types/stockOperation/StockOperationItemDTO";
+import { v4 as uuidv4 } from 'uuid';
 
 interface BaseOperationDetailsProps {
   isEditing?: boolean;
   canEdit?: boolean;
   model?: StockOperationDTO;
-  onSave?: SaveStockOperation;
+  // onSave?: SaveStockOperation;
+  onSave?: SaveStockOperationDetails;
   operation: StockOperationType;
   setup: InitializeResult;
 }
@@ -102,7 +108,10 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
     );
   }
 
-  const handleSave = async (item: StockOperationDTO) => {
+  let reqItems: StockOperationItemDTO[];
+
+  // const handleSave = async (item: StockOperationDTO) => {
+  const handleSave = (item: StockOperationDTO) => {
     try {
       setIsSaving(true);
 
@@ -167,7 +176,15 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
       ) {
         delete req.destinationUuid;
       }
-      await onSave(req);
+
+      if (operationType === OperationType.STOCK_ISSUE_OPERATION_TYPE) {
+        // req.stockOperationItems = reqItems;
+        // console.log("Items 2: " + JSON.stringify(reqItems));
+        console.log("Items 3: " + JSON.stringify(req.stockOperationItems));
+      }
+
+      // await onSave(req);
+      onSave(req);
     } catch (e) {
       // Show notification
     } finally {
@@ -191,11 +208,31 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
                 {...field}
                 onChange={(data: { selectedItem: StockOperationDTO }) => {
                   field.onChange(data.selectedItem.uuid);
+                  reqItems = data.selectedItem.stockOperationItems;
+                  // setValue(
+                  //   "stockOperationItems",
+                  //   data.selectedItem.stockOperationItems
+                  // );
+                  // const stockItems = data.selectedItem.stockOperationItems;
+                  // const updatedStockItems = stockItems.map((item) => ({
+                  //   ...item,
+                  //   id: uuidv4(), // Add a new field named "id" with a random UUID
+                  // }));
+                  Object.assign(
+                    model.stockOperationItems,
+                    data.selectedItem.stockOperationItems
+                  );
+                  // Object.assign(model.stockOperationItems, updatedStockItems);
+                  console.log("Items 1: " + JSON.stringify(reqItems));
+                  // console.log("Items 5: " + JSON.stringify(updatedStockItems));
                 }}
                 itemToElement={(item) => {
                   return item?.operationNumber ?? "";
                 }}
-                titleText={t("requisitionStockOperation", "Select a Requisition")}
+                titleText={t(
+                  "requisitionStockOperation",
+                  "Select a Requisition"
+                )}
                 invalid={!!errors.requisitionStockOperationUuid}
                 invalidText={errors.requisitionStockOperationUuid?.message}
                 placeholder={t("chooseARequisition", "Choose a requisition")}

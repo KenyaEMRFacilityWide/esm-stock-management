@@ -130,6 +130,8 @@ const StockItemsAdditionRow: React.FC<StockItemsAdditionRowProps> = ({
     }
   };
 
+  console.log("Fields: " + JSON.stringify(fields));
+
   return (
     <>
       {fields.map((row, index) => {
@@ -277,7 +279,7 @@ const StockItemsAdditionRow: React.FC<StockItemsAdditionRowProps> = ({
                         }`
                       : ""
                   }
-                  invalid={!!errors?.stockItems?.[index]?.quantity}
+                  invalid={!!errors?.stockItems?.[index]?.quantity?.message}
                 />
               )}
               {!canEdit && row?.quantity?.toLocaleString()}

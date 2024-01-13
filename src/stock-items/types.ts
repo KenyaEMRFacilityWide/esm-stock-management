@@ -3,6 +3,7 @@ import { StockOperationDTO } from "../core/api/types/stockOperation/StockOperati
 
 export type SaveStockItem = (item: StockItemDTO) => Promise<void>;
 export type SaveStockOperation = (item: StockOperationDTO) => Promise<void>;
+export type SaveStockOperationDetails = (item: StockOperationDTO) => void;
 export type SaveStockOperationAction = (
   item: StockOperationDTO
 ) => Promise<void>;

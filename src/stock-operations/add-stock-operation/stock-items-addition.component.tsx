@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StockOperationDTO } from "../../core/api/types/stockOperation/StockOperationDTO";
 import { SaveStockOperation } from "../../stock-items/types";
-import { StockOperationType } from "../../core/api/types/stockOperation/StockOperationType";
+import { OperationType, StockOperationType } from "../../core/api/types/stockOperation/StockOperationType";
 import { InitializeResult } from "./types";
 import {
   Button,
@@ -71,8 +71,15 @@ const StockItemsAddition: React.FC<StockItemsAdditionProps> = ({
 
     // const data = Object.assign(model, item);
     model.stockOperationItems = item.stockItems;
+    console.log("Final Payload 1: " + JSON.stringify(item.stockItems));
     await onSave?.(model);
   };
+
+  const mess = model.stockOperationItems ?? [
+    { uuid: `new-item-1`, id: `new-item-1` },
+  ];
+
+  console.log("Mess core: " + JSON.stringify(mess));
 
   const {
     handleSubmit,
@@ -89,12 +96,22 @@ const StockItemsAddition: React.FC<StockItemsAdditionProps> = ({
     mode: "onSubmit",
   });
 
+  control.register;
+  console.log("Mess core 2: " + JSON.stringify(model.stockOperationItems));
+
   const [isSaving, setIsSaving] = useState(false);
 
   const { fields, append, remove } = useFieldArray({
     name: "stockItems",
     control,
   });
+
+  // fields = model.stockOperationItems;
+
+  control.register;
+
+  console.log("Fields 2: " + JSON.stringify(fields));
+  console.log("Control 1: " + JSON.stringify(control));
 
   const headers = [
     {
@@ -163,6 +180,7 @@ const StockItemsAddition: React.FC<StockItemsAdditionProps> = ({
 
   return (
     <div style={{ margin: "10px" }}>
+      <div>Test: {JSON.stringify(model.stockOperationItems)}</div>
       <div className={styles.tableContainer}>
         <DataTable
           rows={
@@ -253,7 +271,11 @@ const StockItemsAddition: React.FC<StockItemsAdditionProps> = ({
                     canUpdateBatchInformation={canUpdateBatchInformation}
                     canCapturePurchasePrice={canCaptureQuantityPrice}
                     itemUoM={itemUoM}
-                    fields={fields}
+                    fields={
+                      operationType == OperationType.STOCK_ISSUE_OPERATION_TYPE
+                        ? model.stockOperationItems
+                        : fields
+                    }
                   />{" "}
                 </TableBody>
               </Table>
