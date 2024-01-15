@@ -39,7 +39,8 @@ import rootStyles from "../../root.scss";
 import { ResourceRepresentation } from "../../core/api/api";
 import { useStockOperationPages } from "../stock-operations-table.resource";
 import { StockOperationItemDTO } from "../../core/api/types/stockOperation/StockOperationItemDTO";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import { useStockOperationContext } from "./stock-operation-context/useStockOperationContext";
 
 interface BaseOperationDetailsProps {
   isEditing?: boolean;
@@ -66,6 +67,7 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
   },
 }) => {
   const { t } = useTranslation();
+  const { formContext, setFormContext } = useStockOperationContext();
   const { isLoading, items } = useStockOperationPages({
     v: ResourceRepresentation.Full,
     totalCount: true,
@@ -108,9 +110,6 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
     );
   }
 
-  let reqItems: StockOperationItemDTO[];
-
-  // const handleSave = async (item: StockOperationDTO) => {
   const handleSave = (item: StockOperationDTO) => {
     try {
       setIsSaving(true);
@@ -177,13 +176,6 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
         delete req.destinationUuid;
       }
 
-      if (operationType === OperationType.STOCK_ISSUE_OPERATION_TYPE) {
-        // req.stockOperationItems = reqItems;
-        // console.log("Items 2: " + JSON.stringify(reqItems));
-        console.log("Items 3: " + JSON.stringify(req.stockOperationItems));
-      }
-
-      // await onSave(req);
       onSave(req);
     } catch (e) {
       // Show notification
@@ -193,7 +185,6 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
   };
   return (
     <div style={{ margin: "10px" }}>
-      <div>Testing: {canEdit && "true"}</div>
       <form
         className={`${rootStyles.formContainer} ${rootStyles.verticalForm}`}
       >
@@ -208,23 +199,13 @@ const BaseOperationDetails: React.FC<BaseOperationDetailsProps> = ({
                 {...field}
                 onChange={(data: { selectedItem: StockOperationDTO }) => {
                   field.onChange(data.selectedItem.uuid);
-                  reqItems = data.selectedItem.stockOperationItems;
-                  // setValue(
-                  //   "stockOperationItems",
-                  //   data.selectedItem.stockOperationItems
-                  // );
-                  // const stockItems = data.selectedItem.stockOperationItems;
-                  // const updatedStockItems = stockItems.map((item) => ({
-                  //   ...item,
-                  //   id: uuidv4(), // Add a new field named "id" with a random UUID
-                  // }));
                   Object.assign(
                     model.stockOperationItems,
                     data.selectedItem.stockOperationItems
                   );
-                  // Object.assign(model.stockOperationItems, updatedStockItems);
-                  console.log("Items 1: " + JSON.stringify(reqItems));
-                  // console.log("Items 5: " + JSON.stringify(updatedStockItems));
+                  setFormContext({
+                    stockItems: data.selectedItem.stockOperationItems,
+                  });
                 }}
                 itemToElement={(item) => {
                   return item?.operationNumber ?? "";

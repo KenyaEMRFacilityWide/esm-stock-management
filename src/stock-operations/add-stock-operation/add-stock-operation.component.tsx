@@ -21,6 +21,7 @@ import StockOperationPrintButton from "../stock-operations-dialog/stock-operatio
 import StockOperationApproveDispatchButton from "../stock-operations-dialog/stock-operations-approve-dispatch-button.component";
 import StockOperationCompleteDispatchButton from "../stock-operations-dialog/stock-operations-completed-dispatch-button.component";
 import StockOperationIssueStockButton from "../stock-operations-dialog/stock-operations-issue-stock-button.component";
+import { StockOperation } from "./stock-operation-context/useStockOperationContext";
 
 const AddStockOperation: React.FC<AddStockOperationProps> = (props) => {
   const { t } = useTranslation();
@@ -65,7 +66,7 @@ const AddStockOperation: React.FC<AddStockOperationProps> = (props) => {
           onSave={(data) => {
             setManageStockItems(true);
             setSelectedIndex(1);
-            console.log("Items 4: " + JSON.stringify(data.stockOperationItems));
+            // console.log("Items 4: " + JSON.stringify(data.stockOperationItems));
           }}
           operation={props.operation}
         />
@@ -144,7 +145,6 @@ const AddStockOperation: React.FC<AddStockOperationProps> = (props) => {
           margin: "5px",
         }}
       >
-        <div>Can Edit: {props.canEdit}</div>
         <div style={{ margin: "10px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <span style={{ margin: "4px" }}>Status :</span>
@@ -265,11 +265,13 @@ const AddStockOperation: React.FC<AddStockOperationProps> = (props) => {
           </div>
         )}
       </div>
-      <VerticalTabs
-        tabs={tabs}
-        selectedIndex={selectedIndex}
-        onChange={setSelectedIndex}
-      />
+      <StockOperation>
+        <VerticalTabs
+          tabs={tabs}
+          selectedIndex={selectedIndex}
+          onChange={setSelectedIndex}
+        />
+      </StockOperation>
     </>
   );
 };
