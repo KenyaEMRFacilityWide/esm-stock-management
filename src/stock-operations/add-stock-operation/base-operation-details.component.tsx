@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StockOperationDTO } from "../../core/api/types/stockOperation/StockOperationDTO";
-import {
-  SaveStockOperation,
-  SaveStockOperationDetails,
-} from "../../stock-items/types";
+import { SaveStockOperation } from "../../stock-items/types";
 import {
   operationFromString,
   OperationType,
@@ -46,8 +43,7 @@ interface BaseOperationDetailsProps {
   isEditing?: boolean;
   canEdit?: boolean;
   model?: StockOperationDTO;
-  // onSave?: SaveStockOperation;
-  onSave?: SaveStockOperationDetails;
+  onSave?: SaveStockOperation;
   operation: StockOperationType;
   setup: InitializeResult;
 }

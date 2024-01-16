@@ -58,15 +58,9 @@ const AddStockOperation: React.FC<AddStockOperationProps> = (props) => {
           setup={result}
           canEdit={canEdit}
           model={isEditing ? props?.model : result.dto}
-          // onSave={async (data) => {
-          //   setManageStockItems(true);
-          //   setSelectedIndex(1);
-          //   console.log("Items 4: " + JSON.stringify(data.stockOperationItems));
-          // }}
-          onSave={(data) => {
+          onSave={async (data) => {
             setManageStockItems(true);
             setSelectedIndex(1);
-            // console.log("Items 4: " + JSON.stringify(data.stockOperationItems));
           }}
           operation={props.operation}
         />

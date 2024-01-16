@@ -130,8 +130,6 @@ const StockItemsAdditionRow: React.FC<StockItemsAdditionRowProps> = ({
     }
   };
 
-  console.log("Fields: " + JSON.stringify(fields));
-
   return (
     <>
       {fields.map((row, index) => {
